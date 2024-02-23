@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getTasksRequest } from '../../api/tasks';
 import { Task } from '../../interfaces/task.interface';
+import TaskItem from '../TaskItem/TaskItem';
 
 function TasksList() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -16,11 +17,7 @@ function TasksList() {
     <div>
       <h1>Tasks</h1>
       {tasks.map((task) => (
-        <div key={task._id}>
-          <h3>{task.title}</h3>
-          <p>{task.description}</p>
-          <span>{task.done ? 'Done' : 'Pending'}</span>
-        </div>
+        <TaskItem key={task._id} task={task} />
       ))}
     </div>
   );
