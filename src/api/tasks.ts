@@ -11,3 +11,7 @@ export const createTaskRequest = (task: CreateTask) => {
         body: JSON.stringify(task),
     })
 }
+
+export const getTasksRequest = () => {
+    return fetch(`${API}/tasks`)
+}

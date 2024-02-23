@@ -11,10 +11,7 @@ function TaskForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault;
-    console.log(task);
-    const res = await createTaskRequest(task);
-    const data = await res.json();
-    console.log(data);
+    await createTaskRequest(task);
   };
 
   return (
