@@ -1,18 +1,9 @@
-import { useState, useEffect } from 'react';
-import { getTasksRequest } from '../../api/tasks';
-import { Task } from '../../interfaces/task.interface';
 import TaskItem from '../TaskItem/TaskItem';
+import { useTasks } from '../../context/UseTask';
 
 function TasksList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const getTasksInfo = async () => {
-    const response = await getTasksRequest();
-    const data = await response.json();
-    setTasks(data);
-  };
-  useEffect(() => {
-    getTasksInfo();
-  }, []);
+  const { tasks } = useTasks();
+
   return (
     <div>
       <h1>Tasks</h1>

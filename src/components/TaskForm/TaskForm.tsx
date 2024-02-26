@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { createTaskRequest } from '../../api/tasks';
+import { useTasks } from '../../context/UseTask';
 
 function TaskForm() {
   const [task, setTask] = useState({ title: '', description: '', done: false });
@@ -9,9 +9,11 @@ function TaskForm() {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
+  const { createTask } = useTasks();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault;
-    await createTaskRequest(task);
+    createTask(task);
   };
 
   return (
