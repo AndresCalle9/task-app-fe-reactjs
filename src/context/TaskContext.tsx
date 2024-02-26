@@ -1,14 +1,23 @@
 import React, { createContext, useState, useEffect, useMemo } from 'react';
-import { getTasksRequest, createTaskRequest } from '../api/tasks';
-import { CreateTask, Task } from '../interfaces/task.interface';
+import {
+  getTasksRequest,
+  createTaskRequest,
+  deleteTaskRequest,
+  updateTaskRequest,
+} from '../api/tasks';
+import { CreateTask, Task, UpdateTask } from '../interfaces/task.interface';
 
 interface TaskContentValues {
   tasks: Task[];
-  createTask: (task: CreateTask) => void;
+  createTask: (task: CreateTask) => Promise<void>;
+  deleteTask: (id: string) => Promise<void>;
+  updateTask: (id: string, task: UpdateTask) => Promise<void>;
 }
 export const TaskContext = createContext<TaskContentValues>({
   tasks: [],
-  createTask: () => {},
+  createTask: async () => {},
+  deleteTask: async () => {},
+  updateTask: async () => {},
 });
 
 interface Props {
@@ -32,9 +41,24 @@ export const TaskProvider: React.FC<Props> = ({ children }) => {
     setTasks([...tasks, data]);
   };
 
+  const deleteTask = async (id: string) => {
+    const response = await deleteTaskRequest(id);
+    if (response.status == 204) {
+      setTasks(tasks.filter((task) => task._id !== id));
+    }
+  };
+
+  const updateTask = async (id: string, task: UpdateTask) => {
+    const response = await updateTaskRequest(id, task);
+    const data = await response.json();
+    setTasks(
+      tasks.map((task) => (task._id === id ? { ...task, ...data } : task))
+    );
+  };
+
   const memoizedValue = useMemo(
-    () => ({ tasks, createTask }),
-    [tasks, createTask]
+    () => ({ tasks, createTask, deleteTask, updateTask }),
+    [tasks, createTask, deleteTask, updateTask]
   );
 
   return (
